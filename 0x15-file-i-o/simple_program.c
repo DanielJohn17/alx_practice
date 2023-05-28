@@ -1,7 +1,7 @@
 #include "shell.h"
 
 /**
- * Sub - The difference between num1 and num2
+ * sub - The difference between num1 and num2
  * @num1: intiger 1
  * @num2: intiger 2
  *
