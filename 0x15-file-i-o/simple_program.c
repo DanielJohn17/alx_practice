@@ -1,4 +1,4 @@
-#include "shell.h"
+#include <stdio.h>
 
 /**
  * sub - The difference between num1 and num2
@@ -8,7 +8,11 @@
  * Return: difference between num1 and num2
  */
 
-int sub(int *num1, int *num2)
+int main(void)
 {
-	return (num1 - num2);
+	int num1 = 6, num2 = 2;
+	int d;
+	d = num1 - num2;
+	printf("%d\n", d);
+	return (0);
 }
