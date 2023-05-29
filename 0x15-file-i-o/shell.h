@@ -1,9 +1,7 @@
-#ifdef _SHELL_H
-#define _SHELL_H
+#ifndef _SHELL_H_
+#define _SHELL_H_
 
 #include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 
 int sub(int *num1, int *num2);
 
