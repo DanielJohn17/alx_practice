@@ -10,7 +10,7 @@
 
 int main(void)
 {
-	int num1 = 6, num2 = 2;
+	num1 = 6, num2 = 2;
 	int d;
 	d = num1 - num2;
 	printf("%d\n", d);
