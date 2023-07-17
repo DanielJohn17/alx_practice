@@ -1,3 +1,3 @@
-#Simple Shell 
-***These are test files for simple shell project***
-_ _currently under construction_ _
+#Simple Shell
+**_These are test files for simple shell project_**
+\_ _currently under construction_ \_
