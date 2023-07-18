@@ -1,6 +1,6 @@
 #include "shell.h"
 
-int main(void)
+int main(int ac, char *av[])
 {
 	char *token = NULL, *cmd = NULL, *cmd_cpy = NULL;
 	char *dlim = " \n";
@@ -44,13 +44,14 @@ int main(void)
 		if (pid == 0)
 		{
 			if (execve(argv[0], argv, NULL) == -1)
-				perror("execve");
+				perror(av[0]);
 		}
 		else
-			wait(&stat);
+			wait(&pid);
 
 		i = 0;
-		free(cmd), free(cmd_cpy), free(argv);
+		// free(cmd), free(cmd_cpy),
+		free(argv);
 	}
 	return (0);
 }
