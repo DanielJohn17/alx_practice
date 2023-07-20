@@ -6,11 +6,16 @@
 #include <string.h>
 #include <errno.h>
 
+void display_prompt()
+{
+	write(STDOUT_FILENO, "$ ", 2);
+}
+
 int main(int ac __attribute__((unused)), char *av[])
 {
 	char *token = NULL, *cmd = NULL, *cmd_cpy = NULL;
 	char *dlim = "\n";
-	int i = 0;
+	int i = 0, j;
 
 	int argc = 0;
 	char **argv = NULL;
@@ -20,36 +25,33 @@ int main(int ac __attribute__((unused)), char *av[])
 
 	while (1)
 	{
-		write(STDOUT_FILENO, "$ ", 2);
+		if (isatty(STDIN_FILENO))
+			display_prompt();
+
 		if (getline(&cmd, &n, stdin) == -1)
 		{
-			if (errno == 0)
-			{
-				write(STDOUT_FILENO, "\n", 1);
-			}
-			else
-				perror(av[0]);
-			break;
+			if (isatty(STDIN_FILENO))
+				putchar('\n');
+			free(argv), exit(EXIT_SUCCESS);
 		}
-
 		cmd_cpy = strdup(cmd);
 
 		token = strtok(cmd, dlim);
 
 		while (token)
 		{
-			token = strtok(NULL, dlim);
 			argc++;
+			token = strtok(NULL, dlim);
 		}
 
-		argv = malloc(sizeof(char *) * argc);
+		argv = malloc(sizeof(char *) * (argc + 1));
 		token = strtok(cmd_cpy, dlim);
 
 		while (token)
 		{
 			argv[i] = token;
-			token = strtok(NULL, dlim);
 			i++;
+			token = strtok(NULL, dlim);
 		}
 		argv[i] = NULL;
 
@@ -65,8 +67,8 @@ int main(int ac __attribute__((unused)), char *av[])
 		}
 		else
 			wait(&pid);
+
 		i = 0;
-		free(argv);
 	}
 	free(cmd);
 	return (0);
