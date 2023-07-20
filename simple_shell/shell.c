@@ -1,15 +1,9 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <sys/types.h>
-#include <sys/wait.h>
-#include <string.h>
-#include <errno.h>
+#include "shell.h"
 
 int main(int ac __attribute__((unused)), char *av[])
 {
 	char *token = NULL, *cmd = NULL, *cmd_cpy = NULL;
-	char *dlim = "\n";
+	char *dlim = " \n";
 	int i = 0;
 
 	int argc = 0;
@@ -20,16 +14,13 @@ int main(int ac __attribute__((unused)), char *av[])
 
 	while (1)
 	{
-		write(STDOUT_FILENO, "$ ", 2);
+		if (isatty(STDIN_FILENO))
+			prompt();
 		if (getline(&cmd, &n, stdin) == -1)
 		{
-			if (errno == 0)
-			{
-				write(STDOUT_FILENO, "\n", 1);
-			}
-			else
-				perror(av[0]);
-			break;
+			if (isatty(STDIN_FILENO))
+				_putchar('\n');
+			free(argv), exit(EXIT_SUCCESS);
 		}
 
 		cmd_cpy = strdup(cmd);
@@ -66,7 +57,6 @@ int main(int ac __attribute__((unused)), char *av[])
 		else
 			wait(&pid);
 		i = 0;
-		free(argv);
 	}
 	free(cmd);
 	return (0);
