@@ -24,21 +24,21 @@ int main(int ac __attribute__((unused)), char *av[])
 
 		cmd_cpy = strdup(cmd);
 
-		token = strtok(cmd, dlim);
+		token = strtok(cmd, LINE_DELIM);
 
 		while (token)
 		{
-			token = strtok(NULL, dlim);
+			token = strtok(NULL, LINE_DELIM);
 			argc++;
 		}
 
 		argv = malloc(sizeof(char *) * (argc + 1));
-		token = strtok(cmd_cpy, dlim);
+		token = strtok(cmd_cpy, LINE_DELIM);
 
 		while (token)
 		{
 			argv[i] = token;
-			token = strtok(NULL, dlim);
+			token = strtok(NULL, LINE_DELIM);
 			i++;
 		}
 		argv[i] = NULL;
