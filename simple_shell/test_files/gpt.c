@@ -32,28 +32,18 @@ int main(int ac __attribute__((unused)), char *av[])
 		{
 			if (isatty(STDIN_FILENO))
 				putchar('\n');
-			free(cmd), free(cmd_cpy), free(argv), exit(EXIT_SUCCESS);
+			free(cmd), free(argv), exit(EXIT_SUCCESS);
 		}
-		cmd_cpy = strdup(cmd);
-
+		argv = malloc(sizeof(char *) * 1024);
 		token = strtok(cmd, dlim);
 
 		while (token)
 		{
+			argv[argc] = token;
 			argc++;
 			token = strtok(NULL, dlim);
 		}
-
-		argv = malloc(sizeof(char *) * (argc + 1));
-		token = strtok(cmd_cpy, dlim);
-
-		while (token)
-		{
-			argv[i] = token;
-			i++;
-			token = strtok(NULL, dlim);
-		}
-		argv[i] = NULL;
+		argv[argc] = NULL;
 		if (argc > 0)
 		{
 			char *command = argv[0];

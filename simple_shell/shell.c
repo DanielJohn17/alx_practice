@@ -2,9 +2,7 @@
 
 int main(int ac __attribute__((unused)), char *av[])
 {
-	char *token = NULL, *cmd = NULL, *cmd_cpy = NULL;
-	char *dlim = " \n";
-	int i = 0;
+	char *cmd = NULL, *token = NULL;
 
 	int argc = 0;
 	char **argv = NULL;
@@ -21,31 +19,20 @@ int main(int ac __attribute__((unused)), char *av[])
 				_putchar('\n');
 			free(cmd), exit(EXIT_SUCCESS);
 		}
-
-		cmd_cpy = strdup(cmd);
+		argv = malloc(sizeof(char *) * SIZE);
 
 		token = strtok(cmd, LINE_DELIM);
 
 		while (token)
 		{
-			token = strtok(NULL, LINE_DELIM);
+			argv[argc] = token;
 			argc++;
-		}
-
-		argv = malloc(sizeof(char *) * (argc + 1));
-		token = strtok(cmd_cpy, LINE_DELIM);
-
-		while (token)
-		{
-			argv[i] = token;
 			token = strtok(NULL, LINE_DELIM);
-			i++;
 		}
-		argv[i] = NULL;
+		argv[argc] = NULL;
 		exec(argc, argv, av);
 
 		argc = 0;
-		i = 0;
 	}
 
 	return (0);

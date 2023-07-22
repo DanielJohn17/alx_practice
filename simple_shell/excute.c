@@ -1,10 +1,9 @@
 #include "shell.h"
 
-void exec(int argc, char **nd, char **av)
+void exec(int argc, char **argument, char **av)
 {
 	pid_t pid;
-	char *command = nd[0];
-	char **argument = nd;
+	char *command = argument[0];
 	if (argc > 0)
 	{
 		pid = fork();
@@ -14,13 +13,13 @@ void exec(int argc, char **nd, char **av)
 			{
 				perror(av[0]);
 				exit(EXIT_FAILURE);
-				free(nd);
+				free(argument);
 			}
 		}
 		else
 		{
 			wait(&pid);
-			free(nd);
+			free(argument);
 		}
 	}
 }

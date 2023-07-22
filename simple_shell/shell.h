@@ -10,10 +10,11 @@
 #include <errno.h>
 
 #define LINE_DELIM " \n"
+#define SIZE 1024
 
 int _putchar(char c);
 void prompt();
 
-void exec(int argc, char **nd, char **av);
+void exec(int argc, char **argument, char **av);
 
 #endif
