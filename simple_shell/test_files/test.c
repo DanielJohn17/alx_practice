@@ -13,7 +13,7 @@ void display_prompt()
 
 int main(int ac __attribute__((unused)), char *av[])
 {
-	char *token = NULL, *cmd = NULL, *cmd_cpy = NULL;
+	char *token = NULL, *cmd = NULL;
 	char *dlim = " \n";
 	int i = 0, j;
 
@@ -34,39 +34,33 @@ int main(int ac __attribute__((unused)), char *av[])
 				putchar('\n');
 			free(argv), exit(EXIT_SUCCESS);
 		}
-		cmd_cpy = strdup(cmd);
 
+		argv = malloc(sizeof(char *) * 1024);
 		token = strtok(cmd, dlim);
 
 		while (token)
 		{
+			argv[argc] = token;
 			argc++;
 			token = strtok(NULL, dlim);
 		}
+		argv[argc] = NULL;
 
-		argv = malloc(sizeof(char *) * (argc + 1));
-		token = strtok(cmd_cpy, dlim);
-
-		while (token)
+		if (argc > 0)
 		{
-			argv[i] = token;
-			i++;
-			token = strtok(NULL, dlim);
-		}
-		argv[i] = NULL;
+			pid = fork();
 
-		pid = fork();
-
-		if (pid == 0)
-		{
-			if (execve(argv[0], argv, NULL) == -1)
+			if (pid == 0)
 			{
-				perror(av[0]);
-				exit(EXIT_FAILURE);
+				if (execve(argv[0], argv, NULL) == -1)
+				{
+					perror(av[0]);
+					exit(EXIT_FAILURE);
+				}
 			}
+			else
+				wait(&pid);
 		}
-		else
-			wait(&pid);
 		argc = 0;
 		i = 0;
 	}
