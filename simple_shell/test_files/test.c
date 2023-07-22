@@ -14,7 +14,7 @@ void display_prompt()
 int main(int ac __attribute__((unused)), char *av[])
 {
 	char *token = NULL, *cmd = NULL, *cmd_cpy = NULL;
-	char *dlim = "\n";
+	char *dlim = " \n";
 	int i = 0, j;
 
 	int argc = 0;
@@ -67,7 +67,7 @@ int main(int ac __attribute__((unused)), char *av[])
 		}
 		else
 			wait(&pid);
-
+		argc = 0;
 		i = 0;
 	}
 	free(cmd);

@@ -10,7 +10,6 @@ int main(int ac __attribute__((unused)), char *av[])
 	char **argv = NULL;
 
 	size_t n = 0;
-	pid_t pid;
 
 	while (1)
 	{
@@ -20,7 +19,7 @@ int main(int ac __attribute__((unused)), char *av[])
 		{
 			if (isatty(STDIN_FILENO))
 				_putchar('\n');
-			free(argv), exit(EXIT_SUCCESS);
+			free(cmd), exit(EXIT_SUCCESS);
 		}
 
 		cmd_cpy = strdup(cmd);
@@ -33,7 +32,7 @@ int main(int ac __attribute__((unused)), char *av[])
 			argc++;
 		}
 
-		argv = malloc(sizeof(char *) * argc);
+		argv = malloc(sizeof(char *) * (argc + 1));
 		token = strtok(cmd_cpy, dlim);
 
 		while (token)
@@ -43,21 +42,11 @@ int main(int ac __attribute__((unused)), char *av[])
 			i++;
 		}
 		argv[i] = NULL;
+		exec(argc, argv, av);
 
-		pid = fork();
-
-		if (pid == 0)
-		{
-			if (execve(argv[0], argv, NULL) == -1)
-			{
-				perror(av[0]);
-				exit(EXIT_FAILURE);
-			}
-		}
-		else
-			wait(&pid);
+		argc = 0;
 		i = 0;
 	}
-	free(cmd);
+
 	return (0);
 }
