@@ -11,16 +11,16 @@ void display_prompt()
 	write(STDOUT_FILENO, "$ ", 2);
 }
 
-int main(int ac __attribute__((unused)), char *av[])
+int main(int ac, char *av[])
 {
-	char *token = NULL, *cmd = NULL;
+	char *token = NULL, *cmd = NULL, *cmd2 = NULL;
 	char *dlim = " \n";
 	int i = 0, j;
 
 	int argc = 0;
-	char **argv = NULL;
+	char **argv = NULL, **argv2 = NULL;
 
-	size_t n = 0;
+	size_t n = 0, len;
 	pid_t pid;
 
 	while (1)
@@ -32,27 +32,60 @@ int main(int ac __attribute__((unused)), char *av[])
 		{
 			if (isatty(STDIN_FILENO))
 				putchar('\n');
-			free(argv), exit(EXIT_SUCCESS);
+			free(argv), free(cmd), exit(EXIT_SUCCESS);
 		}
 
-		argv = malloc(sizeof(char *) * 1024);
-		token = strtok(cmd, dlim);
-
-		while (token)
+		if (strncmp(cmd, "/bin/", 5) == 0)
 		{
-			argv[argc] = token;
-			argc++;
-			token = strtok(NULL, dlim);
+			argv = malloc(sizeof(char *) * 1024);
+			token = strtok(cmd, dlim);
+
+			while (token)
+			{
+				argv[argc] = token;
+				argc++;
+				token = strtok(NULL, dlim);
+			}
+			argv[argc] = NULL;
+
+			if (argc > 0)
+			{
+				pid = fork();
+
+				if (pid == 0)
+				{
+					if (execve(argv[0], argv, NULL) == -1)
+					{
+						perror(av[0]);
+						exit(EXIT_FAILURE);
+					}
+				}
+				else
+					wait(&pid);
+			}
 		}
-		argv[argc] = NULL;
-
-		if (argc > 0)
+		else if (strncmp(cmd, "/bin/", 5) != 0)
 		{
+			cmd2 = malloc(sizeof(char *) * (ac + 1));
+
+			cmd2 = strcpy(cmd2, "/bin/");
+			cmd2 = strcat(cmd2, cmd);
+
+			argv2 = malloc(sizeof(char *) * 1024);
+
+			token = strtok(cmd2, dlim);
+
+			while (token)
+			{
+				argv2[argc] = token;
+				argc++;
+				token = strtok(NULL, dlim);
+			}
+			argv2[argc] = NULL;
 			pid = fork();
-
 			if (pid == 0)
 			{
-				if (execve(argv[0], argv, NULL) == -1)
+				if (execve(argv2[0], argv2, NULL) == -1)
 				{
 					perror(av[0]);
 					exit(EXIT_FAILURE);
@@ -60,10 +93,10 @@ int main(int ac __attribute__((unused)), char *av[])
 			}
 			else
 				wait(&pid);
+			free(argv2);
+			free(cmd2);
 		}
 		argc = 0;
-		i = 0;
 	}
-	free(cmd);
 	return (0);
 }
