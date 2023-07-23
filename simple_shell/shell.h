@@ -14,7 +14,12 @@
 
 int _putchar(char c);
 void prompt();
+char *_strcpy(char *dest, char *src);
+char *_strcat(char *dest, char *src);
+int _strncmp(char *str1, char *str2, int n);
 
+int builtin(char *cmd);
 void exec(int argc, char **argument, char **av);
+void path_ls(char *cmd2, int ac, char **av);
 
 #endif
