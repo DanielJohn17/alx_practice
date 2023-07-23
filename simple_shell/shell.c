@@ -19,8 +19,8 @@ int main(int ac, char *av[])
 				_putchar('\n');
 			free(cmd), exit(EXIT_SUCCESS);
 		}
-		if (builtin(cmd) == 0)
-			free(cmd), exit(EXIT_SUCCESS);
+		if (builtin(cmd) == errno)
+			free(cmd), exit(errno);
 		if (ac > 0 && _strncmp(cmd, "/bin/", 5) == 0)
 		{
 			argv = malloc(sizeof(char *) * SIZE);
@@ -35,7 +35,6 @@ int main(int ac, char *av[])
 			}
 			argv[argc] = NULL;
 			exec(argc, argv, av);
-			argc = 0;
 		}
 		else if (ac > 0 && _strncmp(cmd, "/bin/", 5) != 0)
 		{
