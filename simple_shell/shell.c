@@ -1,6 +1,6 @@
 #include "shell.h"
 
-int main(int ac __attribute__((unused)), char *av[])
+int main(int ac, char *av[])
 {
 	char *cmd = NULL, *token = NULL;
 
@@ -19,21 +19,28 @@ int main(int ac __attribute__((unused)), char *av[])
 				_putchar('\n');
 			free(cmd), exit(EXIT_SUCCESS);
 		}
-		argv = malloc(sizeof(char *) * SIZE);
-
-		token = strtok(cmd, LINE_DELIM);
-
-		while (token)
+		if (builtin(cmd) == 0)
+			free(cmd), exit(EXIT_SUCCESS);
+		if (ac > 0 && _strncmp(cmd, "/bin/", 5) == 0)
 		{
-			argv[argc] = token;
-			argc++;
-			token = strtok(NULL, LINE_DELIM);
+			argv = malloc(sizeof(char *) * SIZE);
+
+			token = strtok(cmd, LINE_DELIM);
+
+			while (token)
+			{
+				argv[argc] = token;
+				argc++;
+				token = strtok(NULL, LINE_DELIM);
+			}
+			argv[argc] = NULL;
+			exec(argc, argv, av);
+			argc = 0;
 		}
-		argv[argc] = NULL;
-		exec(argc, argv, av);
-
-		argc = 0;
+		else if (ac > 0 && _strncmp(cmd, "/bin/", 5) != 0)
+		{
+			path_ls(cmd, ac, av);
+		}
 	}
-
 	return (0);
 }
