@@ -1,6 +1,14 @@
 #include "shell.h"
 
-void exec(int argc, char **argument, char **av)
+/**
+ * exec - executing function
+ * @argc: intiger input
+ * @argument: command argument
+ * @av: argument vector
+ *
+ * Return: 0 on success 1 if pid is 1 if pid is different from 0
+ */
+int exec(int argc, char **argument, char **av)
 {
 	pid_t pid;
 
@@ -9,7 +17,7 @@ void exec(int argc, char **argument, char **av)
 		pid = fork();
 		if (pid == 0)
 		{
-			if (execve(argument[0], argument, NULL) == -1)
+			if (execve(argument[0], argument, environ) == -1)
 			{
 				perror(av[0]);
 				exit(EXIT_FAILURE);
@@ -20,6 +28,8 @@ void exec(int argc, char **argument, char **av)
 		{
 			wait(&pid);
 			free(argument);
+			return (1);
 		}
 	}
+	return (0);
 }
