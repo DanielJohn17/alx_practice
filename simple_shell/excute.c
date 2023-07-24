@@ -11,17 +11,17 @@
 int exec(int argc, char **argument, char **av)
 {
 	pid_t pid;
-
+	char *comm = argument[0];
 	if (argc > 0)
 	{
 		pid = fork();
 		if (pid == 0)
 		{
-			if (execve(argument[0], argument, environ) == -1)
+			if (execve(comm, argument, environ) == -1)
 			{
+				free(argument);
 				perror(av[0]);
 				exit(EXIT_FAILURE);
-				free(argument);
 			}
 		}
 		else

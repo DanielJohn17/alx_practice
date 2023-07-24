@@ -10,7 +10,7 @@
 int main(int ac, char *av[])
 {
 	char *cmd = NULL;
-	int status;
+	int status = 0;
 	size_t n = 0;
 
 	signal(SIGINT, SIG_IGN);
@@ -20,9 +20,11 @@ int main(int ac, char *av[])
 			prompt();
 		if (getline(&cmd, &n, stdin) == -1)
 		{
+			if (cmd)
+				free(cmd);
 			if (isatty(STDIN_FILENO))
 				_putchar('\n');
-			free(cmd), exit(EXIT_SUCCESS);
+			exit(EXIT_SUCCESS);
 		}
 		remove_space(cmd);
 		if (_strlen(cmd) == 0)
@@ -45,6 +47,7 @@ int main(int ac, char *av[])
 			if (status == 1)
 				continue;
 		}
+		free(cmd);
 	}
 	return (0);
 }

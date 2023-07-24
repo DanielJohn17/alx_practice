@@ -9,7 +9,7 @@
  */
 int path_ls_bin(char *cmd, char **av)
 {
-	int argc = 0, status;
+	int argc = 0, status = 0;
 	char **argv = NULL, *token = NULL;
 
 	argv = malloc(sizeof(char *) * SIZE);
@@ -28,6 +28,7 @@ int path_ls_bin(char *cmd, char **av)
 	{
 		return (1);
 	}
+	free(argv);
 	return (0);
 }
 
@@ -39,12 +40,12 @@ int path_ls_bin(char *cmd, char **av)
  *
  * Return: 0 on success 1 if exec function returns 1
  */
-int path_ls(char *cmd, int ac, char **av)
+int path_ls(char *cmd, int ac __attribute__((unused)), char **av)
 {
-	int argc = 0, status;
+	int argc = 0, status = 0;
 	char **argv2 = NULL, *token = NULL, *cmd2 = NULL;
 
-	cmd2 = malloc(sizeof(char *) * (ac + 1));
+	cmd2 = malloc(sizeof(char *) * SIZE);
 
 	cmd2 = _strcpy(cmd2, "/bin/");
 	cmd2 = _strcat(cmd2, cmd);
@@ -52,21 +53,22 @@ int path_ls(char *cmd, int ac, char **av)
 	argv2 = malloc(sizeof(char *) * SIZE);
 
 	token = strtok(cmd2, LINE_DELIM);
-
+	argv2[0] = token;
 	while (token)
 	{
-		argv2[argc] = token;
 		argc++;
 		token = strtok(NULL, LINE_DELIM);
+		argv2[argc] = token;
 	}
 	argv2[argc] = NULL;
 
 	status = exec(argc, argv2, av);
+	free(cmd2);
 	if (status == 1)
 	{
 		return (1);
 	}
 
-	free(cmd2);
+	free(argv2);
 	return (0);
 }
