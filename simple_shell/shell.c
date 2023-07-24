@@ -1,14 +1,19 @@
 #include "shell.h"
 
+/**
+ * main - Simple unix shell
+ * @ac: argument count
+ * @av: argument vector
+ *
+ * Return: 0 on success
+ */
 int main(int ac, char *av[])
 {
-	char *cmd = NULL, *token = NULL;
-
-	int argc = 0;
-	char **argv = NULL;
-
+	char *cmd = NULL;
+	int status;
 	size_t n = 0;
 
+	signal(SIGINT, SIG_IGN);
 	while (1)
 	{
 		if (isatty(STDIN_FILENO))
@@ -19,26 +24,26 @@ int main(int ac, char *av[])
 				_putchar('\n');
 			free(cmd), exit(EXIT_SUCCESS);
 		}
+		remove_space(cmd);
+		if (_strlen(cmd) == 0)
+			continue;
+
 		if (builtin(cmd) == errno)
-			free(cmd), exit(errno);
+			free(cmd), exit(EXIT_SUCCESS);
+
+		if (builtin(cmd) == 1)
+			continue;
 		if (ac > 0 && _strncmp(cmd, "/bin/", 5) == 0)
 		{
-			argv = malloc(sizeof(char *) * SIZE);
-
-			token = strtok(cmd, LINE_DELIM);
-
-			while (token)
-			{
-				argv[argc] = token;
-				argc++;
-				token = strtok(NULL, LINE_DELIM);
-			}
-			argv[argc] = NULL;
-			exec(argc, argv, av);
+			status = path_ls_bin(cmd, av);
+			if (status == 1)
+				continue;
 		}
 		else if (ac > 0 && _strncmp(cmd, "/bin/", 5) != 0)
 		{
-			path_ls(cmd, ac, av);
+			status = path_ls(cmd, ac, av);
+			if (status == 1)
+				continue;
 		}
 	}
 	return (0);
