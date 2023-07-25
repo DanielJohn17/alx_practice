@@ -9,7 +9,9 @@
 int builtin(char *cmd)
 {
 	if (_strncmp(cmd, "exit", 4) == 0)
-		return (errno);
+	{
+		return (0);
+	}
 	if (_strncmp(cmd, "env", 3) == 0)
 	{
 		print_env();

@@ -13,7 +13,6 @@ int main(int ac, char *av[])
 	int status = 0;
 	size_t n = 0;
 
-	signal(SIGINT, SIG_IGN);
 	while (1)
 	{
 		if (isatty(STDIN_FILENO))
@@ -30,11 +29,11 @@ int main(int ac, char *av[])
 		if (_strlen(cmd) == 0)
 			continue;
 
-		if (builtin(cmd) == errno)
-			free(cmd), exit(EXIT_SUCCESS);
-
 		if (builtin(cmd) == 1)
 			continue;
+
+		else if (builtin(cmd) == 0)
+			free(cmd), exit(EXIT_SUCCESS);
 		if (ac > 0 && _strncmp(cmd, "/bin/", 5) == 0)
 		{
 			status = path_ls_bin(cmd, av);
@@ -47,7 +46,6 @@ int main(int ac, char *av[])
 			if (status == 1)
 				continue;
 		}
-		free(cmd);
 	}
 	return (0);
 }

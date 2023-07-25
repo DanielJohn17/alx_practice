@@ -11,6 +11,7 @@
 int exec(int argc, char **argument, char **av)
 {
 	pid_t pid;
+	int status;
 	char *comm = argument[0];
 	if (argc > 0)
 	{
@@ -20,13 +21,17 @@ int exec(int argc, char **argument, char **av)
 			if (execve(comm, argument, environ) == -1)
 			{
 				free(argument);
-				perror(av[0]);
-				exit(EXIT_FAILURE);
+				error(av[0], comm);
+				exit(127);
 			}
 		}
 		else
 		{
-			wait(&pid);
+			wait(&status);
+			if (WIFEXITED(status) && WEXITSTATUS(status) == 127)
+			{
+				exit(127);
+			}
 			free(argument);
 			return (1);
 		}

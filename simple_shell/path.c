@@ -64,11 +64,12 @@ int path_ls(char *cmd, int ac __attribute__((unused)), char **av)
 
 	status = exec(argc, argv2, av);
 	free(cmd2);
+
 	if (status == 1)
 	{
 		return (1);
 	}
 
-	free(argv2);
+	/*free(argv2);*/
 	return (0);
 }
