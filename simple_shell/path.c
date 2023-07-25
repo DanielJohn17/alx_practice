@@ -70,6 +70,5 @@ int path_ls(char *cmd, int ac __attribute__((unused)), char **av)
 		return (1);
 	}
 
-	/*free(argv2);*/
 	return (0);
 }
