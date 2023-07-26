@@ -18,7 +18,8 @@ int exec(int argc, char **argument, char **av)
 		pid = fork();
 		if (pid == 0)
 		{
-			if (execve(comm, argument, environ) == -1)
+			status = execve(comm, argument, environ);
+			if (status == -1)
 			{
 				free(argument);
 				error(av[0], comm);
@@ -28,10 +29,8 @@ int exec(int argc, char **argument, char **av)
 		else
 		{
 			wait(&status);
-			if (WIFEXITED(status) && WEXITSTATUS(status) == 127)
-			{
-				exit(127);
-			}
+			if (WIFEXITED(status))
+				errno = WEXITSTATUS(status);
 			free(argument);
 			return (1);
 		}

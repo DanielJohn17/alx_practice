@@ -49,7 +49,6 @@ int error(char *name, char *cmd_name)
 {
 	int i;
 	char *error = ": not found\n";
-
 	for (i = 0; name[i] != '\0'; i++)
 		_putchar(name[i]);
 	_putchar(':');
