@@ -9,7 +9,7 @@
  */
 int path_ls_bin(char *cmd, char **av)
 {
-	int argc = 0, status = 0;
+	int argc = 0, status = 0, i;
 	char **argv = NULL, *token = NULL;
 
 	argv = malloc(sizeof(char *) * SIZE);
@@ -24,12 +24,10 @@ int path_ls_bin(char *cmd, char **av)
 	}
 	argv[argc] = NULL;
 	status = exec(argc, argv, av);
-	if (status == 1)
-	{
-		return (1);
-	}
+	for (i = 0; argv[i]; i++)
+		free(argv[i]);
 	free(argv);
-	return (0);
+	return (status);
 }
 
 /**
@@ -42,7 +40,7 @@ int path_ls_bin(char *cmd, char **av)
  */
 int path_ls(char *cmd, char **av)
 {
-	int argc = 0, status = 0;
+	int argc = 0, status = 0, i;
 	char **argv2 = NULL, *token = NULL, *cmd2 = NULL;
 
 	cmd2 = malloc(sizeof(char *) * SIZE);
@@ -63,10 +61,8 @@ int path_ls(char *cmd, char **av)
 	argv2[argc] = NULL;
 	status = exec(argc, argv2, av);
 	free(cmd2);
-	if (status == 1)
-	{
-		return (1);
-	}
+	for (i = 0; argv2[i]; i++)
+		free(argv2[i]);
 	free(argv2);
-	return (0);
+	return (status);
 }
