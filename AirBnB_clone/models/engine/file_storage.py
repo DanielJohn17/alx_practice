@@ -30,7 +30,7 @@ class FileStorage:
             "BaseModel": BaseModel
         }
         
-        if os.path.exists() is True:
+        if os.path.exists(FileStorage.__file_path) is True:
             with open(FileStorage.__file_path, 'r') as f:
                 for key, value in json.load(f).items():
                     self.new(classes_dct[value['__class__']](**value))
