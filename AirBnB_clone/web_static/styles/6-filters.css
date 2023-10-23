@@ -51,3 +51,24 @@
     font-weight: 400;
     font-size: 14px;
 }
+
+.filters div:hover ul.popover {
+    display: block;
+}
+
+ul.popover{
+    display: none;
+    position: absolute;
+    top: 0;
+    margin-top: 70px;
+    background-color: #FAFAFA;
+    border: 1px solid #DDDDDD;
+    box-sizing: border-box;
+    border-radius: 4px;
+    z-index: 1;
+    width: 100%;
+}
+
+ul.popover li ul h2 {
+    font-size: 16px;
+}
