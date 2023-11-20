@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 """ Module for HBNBCommand """
 import cmd
+import shlex
 from models.base_model import BaseModel
 from models.user import User
 from models.state import State
@@ -52,8 +53,32 @@ class HBNBCommand(cmd.Cmd):
             if not line:
                 raise SyntaxError()
             my_list = line.split(" ")
-            obj = eval("{}()".format(my_list[0]))
-            print("{}".format(obj.id))
+            dict_obj = eval("{}()".format(my_list[0]))
+            print("{}".format(dict_obj.id))
+            print(my_list)
+            print()
+            for n in range(1, len(my_list)):
+                print(my_list[n])
+                my_list[n] = my_list[n].replace("=", " ")
+                print(my_list[n])
+                print()
+                
+                attr = shlex.split(my_list[n])
+                print (attr)
+                print()
+                
+                attr[1] = attr[1].replace("_", " ")
+                try:
+                    variable = eval(attr[1])
+                    attr[1] = variable
+                    print(attr)
+                    print()
+                except:
+                    pass
+                if type(attr[1]) is not tuple:
+                    setattr(dict_obj, attr[0], attr[1])
+                    
+                dict_obj.save()
         except SyntaxError:
             print("** class name missing **")
         except NameError:
