@@ -73,12 +73,13 @@ class HBNBCommand(cmd.Cmd):
                     attr[1] = variable
                     print(attr)
                     print()
-                except:
+                except Exception as e:
                     pass
                 if type(attr[1]) is not tuple:
                     setattr(dict_obj, attr[0], attr[1])
-                    
-                dict_obj.save()
+
+            dict_obj.save()
+
         except SyntaxError:
             print("** class name missing **")
         except NameError:
